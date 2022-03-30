@@ -11,9 +11,9 @@ const {
 
 // Mock some data
 const books = [
-  { name: "Name of the Wind", genre: "Fantasy", id: "1" },
-  { name: "The Final Empire", genre: "Fantasy", id: "2" },
-  { name: "The Long Earth", genre: "Sci-Fi", id: "3" },
+  { name: "Name of the Wind", genre: "Fantasy", id: "1", authorId: "1" },
+  { name: "The Final Empire", genre: "Fantasy", id: "2", authorId: "2" },
+  { name: "The Long Earth", genre: "Sci-Fi", id: "3", authorId: "3" },
 ];
 
 const authors = [
@@ -29,6 +29,13 @@ const BookType = new GraphQLObjectType({
     id: { type: GraphQLID },
     name: { type: GraphQLString },
     genre: { type: GraphQLString },
+    author: {
+      type: AuthorType,
+      resolve(parent, args) {
+        // console.log("parent: ", parent); // parent is a book
+        return lodash.find(authors, { id: parent.authorId });
+      },
+    },
   }),
 });
 
@@ -50,7 +57,7 @@ const RootQuery = new GraphQLObjectType({
       args: { id: { type: GraphQLID } },
       resolve(parent, args) {
         // Code to get data from DB/other source
-        // console.log(typeof args.id); // string
+        // console.log(typeof args.id); // id is a string
         return lodash.find(books, { id: args.id });
       },
     },
