@@ -14,7 +14,7 @@ app.use(
   })
 );
 
-// Connect to mongo database on mLab
+// Connect to mongodb cluster on mLab.com
 // Make sure to pass your username and password
 mongoose.connect(
   "mongodb+srv://thiago:test123@graphql-ninja.ifqjh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
