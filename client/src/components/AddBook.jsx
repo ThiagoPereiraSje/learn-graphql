@@ -1,12 +1,16 @@
 import { useQuery } from "@apollo/client";
+import { useState } from "react";
 import { getAuthorsQuery } from "../queries/queries";
 
 export default function AddBook() {
   const { loading, error, data } = useQuery(getAuthorsQuery);
+  const [bookName, setBookName] = useState("");
+  const [bookGenre, setBookGenre] = useState("");
+  const [authorId, setAuthorId] = useState("");
 
   const displayAuthors = () => {
-    if (loading) return <option>Loading Authors...</option>;
-    if (error) return <option>Oops! :(</option>;
+    if (loading) return <option value="">Loading Authors...</option>;
+    if (error) return <option value="">Oops! :(</option>;
 
     return data.authors.map((author) => (
       <option key={author.id} value={author.id}>
@@ -15,25 +19,50 @@ export default function AddBook() {
     ));
   };
 
+  const validForm = () => {
+    return bookName.trim() && bookGenre.trim() && authorId.trim();
+  };
+
+  const submitForm = (e) => {
+    e.preventDefault();
+    console.log("bookName: ", bookName);
+    console.log("bookGenre: ", bookGenre);
+    console.log("authorId: ", authorId);
+  };
+
   return (
-    <form id="add-book">
+    <form id="add-book" onSubmit={submitForm}>
       <div className="field">
         <label htmlFor="book-name">Name:</label>
-        <input type="text" name="book-name" />
+        <input
+          type="text"
+          name="book-name"
+          value={bookName}
+          onChange={(e) => setBookName(e.target.value)}
+        />
       </div>
       <div className="field">
         <label htmlFor="book-genre">Genre:</label>
-        <input type="text" name="book-genre" />
+        <input
+          type="text"
+          name="book-genre"
+          value={bookGenre}
+          onChange={(e) => setBookGenre(e.target.value)}
+        />
       </div>
       <div className="field">
         <label htmlFor="book-author">Author:</label>
-        <select name="book-author">
-          <option>--Selecione--</option>
+        <select
+          name="book-author"
+          value={authorId}
+          onChange={(e) => setAuthorId(e.target.value)}
+        >
+          <option value="">--Selecione--</option>
           {displayAuthors()}
         </select>
       </div>
 
-      <button>Add Book</button>
+      <button disabled={!validForm()}>Add Book</button>
     </form>
   );
 }
