@@ -1,9 +1,20 @@
-import { useQuery } from "@apollo/client";
+import { useQuery, useMutation } from "@apollo/client";
 import { useState } from "react";
-import { getAuthorsQuery } from "../queries/queries";
+import { getAuthorsQuery, addBookMutation } from "../queries/queries";
+
+/*
+const [addTodo, { data, loading, error }] = useMutation(ADD_TODO, {
+  variables: {
+    text: "placeholder",
+    someOtherVariable: 1234,
+  },
+});
+*/
 
 export default function AddBook() {
   const { loading, error, data } = useQuery(getAuthorsQuery);
+  const [addBook, mutation] = useMutation(addBookMutation);
+
   const [bookName, setBookName] = useState("");
   const [bookGenre, setBookGenre] = useState("");
   const [authorId, setAuthorId] = useState("");
@@ -23,11 +34,22 @@ export default function AddBook() {
     return bookName.trim() && bookGenre.trim() && authorId.trim();
   };
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
-    console.log("bookName: ", bookName);
-    console.log("bookGenre: ", bookGenre);
-    console.log("authorId: ", authorId);
+
+    try {
+      await addBook({
+        variables: { name: bookName, genre: bookGenre, authorId: authorId },
+      });
+
+      console.log("error: ", mutation.error);
+
+      setBookName("");
+      setBookGenre("");
+      setAuthorId("");
+    } catch (error) {
+      console.log("error: ", error);
+    }
   };
 
   return (
