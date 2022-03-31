@@ -2,6 +2,7 @@ const express = require("express");
 const { graphqlHTTP } = require("express-graphql");
 const schema = require("./schema/schema");
 const mongoose = require("mongoose");
+require("dotenv").config();
 
 const app = express();
 
@@ -16,9 +17,8 @@ app.use(
 
 // Connect to mongodb cluster on mLab.com
 // Make sure to pass your username and password
-mongoose.connect(
-  "mongodb+srv://thiago:test123@graphql-ninja.ifqjh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
-);
+const MONGODB_URL = process.env.MONGODB_URL;
+mongoose.connect(MONGODB_URL);
 
 mongoose.connection.once("open", () => {
   console.log("connected to database!");
