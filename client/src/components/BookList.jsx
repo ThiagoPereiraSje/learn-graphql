@@ -17,15 +17,11 @@ export default function BookList() {
     if (loading) return <>Loading books...</>;
     if (error) return <>Oops! :(</>;
 
-    return (
-      <>
-        {data.books.map((book) => (
-          <li key={book.id}>
-            {book.name} - {book.genre}
-          </li>
-        ))}
-      </>
-    );
+    return data.books.map((book) => (
+      <li key={book.id}>
+        {book.name} - {book.genre}
+      </li>
+    ));
   };
 
   return (
