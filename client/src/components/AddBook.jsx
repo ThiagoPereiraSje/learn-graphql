@@ -1,6 +1,10 @@
 import { useQuery, useMutation } from "@apollo/client";
 import { useState } from "react";
-import { getAuthorsQuery, addBookMutation } from "../queries/queries";
+import {
+  getAuthorsQuery,
+  addBookMutation,
+  getBooksQuery,
+} from "../queries/queries";
 
 export default function AddBook() {
   const { loading, error, data } = useQuery(getAuthorsQuery);
@@ -31,6 +35,7 @@ export default function AddBook() {
     try {
       const result = await addBook({
         variables: { name: bookName, genre: bookGenre, authorId: authorId },
+        refetchQueries: [{ query: getBooksQuery }],
       });
 
       console.log("result: ", result);
