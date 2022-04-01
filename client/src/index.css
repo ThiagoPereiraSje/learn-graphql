@@ -11,3 +11,8 @@ body {
 #add-book button {
   margin-top: 2em;
 }
+
+#book-list-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
