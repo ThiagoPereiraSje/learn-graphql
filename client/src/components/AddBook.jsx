@@ -2,18 +2,9 @@ import { useQuery, useMutation } from "@apollo/client";
 import { useState } from "react";
 import { getAuthorsQuery, addBookMutation } from "../queries/queries";
 
-/*
-const [addTodo, { data, loading, error }] = useMutation(ADD_TODO, {
-  variables: {
-    text: "placeholder",
-    someOtherVariable: 1234,
-  },
-});
-*/
-
 export default function AddBook() {
   const { loading, error, data } = useQuery(getAuthorsQuery);
-  const [addBook, mutation] = useMutation(addBookMutation);
+  const [addBook] = useMutation(addBookMutation);
 
   const [bookName, setBookName] = useState("");
   const [bookGenre, setBookGenre] = useState("");
@@ -38,11 +29,11 @@ export default function AddBook() {
     e.preventDefault();
 
     try {
-      await addBook({
+      const result = await addBook({
         variables: { name: bookName, genre: bookGenre, authorId: authorId },
       });
 
-      console.log("error: ", mutation.error);
+      console.log("result: ", result);
 
       setBookName("");
       setBookGenre("");
